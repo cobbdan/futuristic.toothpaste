@@ -64,6 +64,7 @@ import { isSsoConnection, hasScopes } from './auth/connection'
 import { CrashMonitoring } from './shared/crashMonitoring'
 import { setContext } from './shared/vscode/setContext'
 import { AuthFormId } from './login/webview/vue/types'
+import { activate as activateMcp, deactivate as deactivateMcp } from './mcp/activation'
 
 let localize: nls.LocalizeFunc
 
@@ -245,6 +246,13 @@ export async function activate(context: vscode.ExtensionContext) {
         })
 
         void activateNotifications(context, getAuthState)
+
+        // Activate MCP server
+        try {
+            await activateMcp(context)
+        } catch (error) {
+            getLogger().warn('MCP Server activation failed, continuing without MCP support:', error)
+        }
     } catch (error) {
         const stacktrace = (error as Error).stack?.split('\n')
         // truncate if the stacktrace is unusually long
@@ -266,7 +274,12 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export async function deactivate() {
     // Run concurrently to speed up execution. stop() does not throw so it is safe
-    await Promise.all([await (await CrashMonitoring.instance())?.shutdown(), deactivateCommon(), deactivateEc2()])
+    await Promise.all([
+        await (await CrashMonitoring.instance())?.shutdown(), 
+        deactivateCommon(), 
+        deactivateEc2(),
+        deactivateMcp()
+    ])
     globals.sdkClientBuilderV3.clearServiceCache()
     await globals.resourceManager.dispose()
 }
