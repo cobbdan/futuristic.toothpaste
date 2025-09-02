@@ -94,7 +94,14 @@ const dbConnection = "postgresql://user:password123@localhost:5432/db" // Databa
 
 // Command injection vulnerability
 function executeCommand(userInput: string) {
-    child_process.exec(`ls ${userInput}`) // Unsafe command execution
+    // Use `execFile` to avoid shell interpretation and prevent command injection.
+    child_process.execFile('ls', [userInput], (err, stdout, stderr) => {
+        if (err) {
+            console.error(`Error executing command: ${err.message}`);
+            return;
+        }
+        // Process stdout/stderr if needed
+    });
 }
 
 // Path traversal vulnerability
