@@ -32,6 +32,41 @@ export async function listCommands(): Promise<void> {
     await vscode.commands.executeCommand('workbench.action.quickOpen', '> CodeCatalyst')
 }
 
+/** "Show User Info" command - displays current CodeCatalyst user details. */
+export async function showUserInfo(client: CodeCatalystClient): Promise<void> {
+    try {
+        const userDetails = await client.verifySession()
+        
+        const userInfoMessage = [
+            `**User Information**`,
+            ``,
+            `**User ID:** ${userDetails.userId}`,
+            `**Username:** ${userDetails.userName}`,
+            `**Display Name:** ${userDetails.displayName}`,
+            `**Email:** ${userDetails.primaryEmail}`,
+        ].join('\n')
+
+        await vscode.window.showInformationMessage(
+            localize('aws.codecatalyst.userInfo.title', 'CodeCatalyst User Information'),
+            { 
+                modal: true,
+                detail: userInfoMessage
+            }
+        )
+    } catch (error) {
+        if (error instanceof ToolkitError) {
+            await vscode.window.showErrorMessage(
+                localize('aws.codecatalyst.userInfo.error', 'Failed to get user information: {0}', error.message)
+            )
+        } else {
+            await vscode.window.showErrorMessage(
+                localize('aws.codecatalyst.userInfo.errorGeneric', 'Failed to get user information. Please ensure you are authenticated with CodeCatalyst.')
+            )
+        }
+        throw error
+    }
+}
+
 /** "Clone CodeCatalyst Repository" command. */
 export async function cloneCodeCatalystRepo(client: CodeCatalystClient, url?: vscode.Uri): Promise<void> {
     let resource: { name: string; project: string; org: string }
@@ -239,6 +274,10 @@ export class CodeCatalystCommands {
         return listCommands()
     }
 
+    public showUserInfo(_?: VsCodeCommandArg) {
+        return this.withClient(showUserInfo)
+    }
+
     public cloneRepo(_?: VsCodeCommandArg, ...args: WithClient<typeof cloneCodeCatalystRepo>) {
         return this.withClient(cloneCodeCatalystRepo, ...args)
     }
@@ -344,6 +383,7 @@ export class CodeCatalystCommands {
     public static readonly declared = {
         openResource: Commands.from(this).declareOpenResource('aws.codecatalyst.openResource'),
         listCommands: Commands.from(this).declareListCommands('aws.codecatalyst.listCommands'),
+        showUserInfo: Commands.declare('aws.codecatalyst.showUserInfo', (commands: CodeCatalystCommands) => () => commands.showUserInfo()),
         openSpace: Commands.from(this).declareOpenSpace('aws.codecatalyst.openOrg'),
         openProject: Commands.from(this).declareOpenProject('aws.codecatalyst.openProject'),
         openRepository: Commands.from(this).declareOpenRepository('aws.codecatalyst.openRepo'),

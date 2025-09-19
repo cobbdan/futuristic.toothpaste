@@ -1425,6 +1425,11 @@
                     "group": "1_codeCatalyst@1"
                 },
                 {
+                    "command": "aws.codecatalyst.showUserInfo",
+                    "when": "view == aws.codecatalyst && !isCloud9 && aws.codecatalyst.connected",
+                    "group": "1_codeCatalyst@2"
+                },
+                {
                     "command": "aws.codecatalyst.manageConnections",
                     "when": "view == aws.codecatalyst && !isCloud9 && !aws.codecatalyst.connected",
                     "group": "2_codeCatalyst@1"
@@ -2538,6 +2543,12 @@
                 "title": "%AWS.command.codecatalyst.signout%",
                 "category": "AWS",
                 "icon": "$(debug-disconnect)",
+                "enablement": "isCloud9 || !aws.isWebExtHost"
+            },
+            {
+                "command": "aws.codecatalyst.showUserInfo",
+                "title": "%AWS.command.codecatalyst.showUserInfo%",
+                "category": "AWS",
                 "enablement": "isCloud9 || !aws.isWebExtHost"
             },
             {
