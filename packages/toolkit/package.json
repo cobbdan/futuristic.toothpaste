@@ -1427,6 +1427,8 @@
                 {
                     "command": "aws.codecatalyst.showUserInfo",
                     "when": "view == aws.codecatalyst && !isCloud9 && aws.codecatalyst.connected",
+                    "group": "1_codeCatalyst@3"
+                },
                     "group": "1_codeCatalyst@2"
                 },
                 {
