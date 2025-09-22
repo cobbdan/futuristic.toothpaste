@@ -46,8 +46,32 @@ describe('CodeCatalyst Commands', function () {
             assert(options.detail.includes('Test User'))
             assert(options.detail.includes('test@example.com'))
         })
+        it('displays error message when client fails with ToolkitError', async function () {
+            const toolkitError = new ToolkitError('Authentication failed', { code: 'NoConnectionBadState' })
+            mockClient.verifySession.rejects(toolkitError)
 
-        it('displays error message when client fails', async function () {
+            try {
+                await showUserInfo(mockClient as any)
+                assert.fail('Expected error to be thrown')
+            } catch (error) {
+                assert(showErrorMessageStub.calledOnce)
+                const errorMessage = showErrorMessageStub.firstCall.args[0]
+                assert(errorMessage.includes('Authentication failed'))
+            }
+        })
+
+        it('displays generic error message when client fails with generic error', async function () {
+            mockClient.verifySession.rejects(new Error('Network error'))
+
+            try {
+                await showUserInfo(mockClient as any)
+                assert.fail('Expected error to be thrown')
+            } catch (error) {
+                assert(showErrorMessageStub.calledOnce)
+                const errorMessage = showErrorMessageStub.firstCall.args[0]
+                assert(errorMessage.includes('Please ensure you are authenticated'))
+            }
+        })
             mockClient.verifySession.rejects(new Error('Authentication failed'))
 
             try {
