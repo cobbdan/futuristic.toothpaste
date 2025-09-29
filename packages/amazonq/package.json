@@ -219,6 +219,20 @@
                     "markdownDescription": "%AWS.configuration.description.amazonq.proxy.certificateAuthority%",
                     "default": null,
                     "scope": "application"
+                },
+                "amazonQ.mcp.enabled": {
+                    "type": "boolean",
+                    "markdownDescription": "Enable Amazon Q MCP (Model Context Protocol) server to allow external applications to interact with Amazon Q",
+                    "default": true,
+                    "scope": "application"
+                },
+                "amazonQ.mcp.port": {
+                    "type": "number",
+                    "markdownDescription": "Port number for the Amazon Q MCP server to listen on",
+                    "default": 3001,
+                    "minimum": 1024,
+                    "maximum": 65535,
+                    "scope": "application"
                 }
             }
         },

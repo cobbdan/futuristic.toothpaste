@@ -45,6 +45,7 @@ import { registerCommands } from './commands'
 import { focusAmazonQPanel } from 'aws-core-vscode/codewhispererChat'
 import { activate as activateAmazonqLsp } from './lsp/activation'
 import { hasGlibcPatch } from './lsp/client'
+import { activateMcp } from './mcp'
 
 export const amazonQContextPrefix = 'amazonq'
 
@@ -136,6 +137,9 @@ export async function activateAmazonQCommon(context: vscode.ExtensionContext, is
 
     // Amazon Q specific commands
     registerCommands(context)
+
+    // Activate MCP server
+    await activateMcp(context)
 
     // Handle Amazon Q Extension un-installation.
     setupUninstallHandler(VSCODE_EXTENSION_ID.amazonq, context.extension.packageJSON.version, context)
