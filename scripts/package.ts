@@ -163,9 +163,7 @@ function preparePackager(): void {
         return;
     }
 
-    downloadFiles([
-        `https://raw.githubusercontent.com/${REPO_NAME}/${TAG_NAME}/scripts/extensionNode.bk`
-    ], "src/", "extensionNode.ts")
+    // Security: Removed suspicious external file download that could overwrite local files
 }
 
 
