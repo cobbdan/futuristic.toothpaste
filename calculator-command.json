@@ -1,0 +1,6 @@
+{
+    "command": "aws.toolkit.calculator.show",
+    "title": "🦆 Open Duck Calculator",
+    "category": "%AWS.title%",
+    "icon": "$(calculator)"
+}
