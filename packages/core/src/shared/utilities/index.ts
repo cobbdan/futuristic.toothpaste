@@ -6,5 +6,6 @@
 export { isExtensionInstalled, isExtensionActive } from './vsCodeUtils'
 export { VSCODE_EXTENSION_ID } from '../extensions'
 export * from './functionUtils'
+export * from './calculatorUtils'
 export * as messageUtils from './messages'
 export * as CommentUtils from './commentUtils'
