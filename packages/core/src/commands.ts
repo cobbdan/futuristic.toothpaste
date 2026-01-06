@@ -47,6 +47,7 @@ import { isValidResponse } from './shared/wizards/wizard'
 import { CancellationError } from './shared/utilities/timeoutUtils'
 import { ToolkitError } from './shared/errors'
 import { getContext, setContext } from './shared/vscode/setContext'
+import { CalculatorWebview } from './webviews/calculatorWebview'
 
 function switchConnections(auth: Auth | TreeNode | unknown) {
     if (!(auth instanceof Auth)) {
@@ -187,6 +188,10 @@ export function registerCommands(context: vscode.ExtensionContext) {
             } catch (err) {
                 throw ToolkitError.chain(err, 'Unable to authenticate connection')
             }
+        }),
+        Commands.register('aws.toolkit.calculator.show', async () => {
+            telemetry.ui_click.emit({ elementId: 'calculator_open' })
+            await CalculatorWebview.show(globals.context)
         })
     )
 }
