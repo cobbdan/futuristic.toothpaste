@@ -598,6 +598,7 @@
         "portfinder": "^1.0.32",
         "semver": "^7.5.4",
         "stream-buffers": "^3.0.2",
+        "@modelcontextprotocol/sdk": "^0.5.0",
         "strip-ansi": "^5.2.0",
         "tcp-port-used": "^1.0.1",
         "vscode-languageclient": "^6.1.4",
