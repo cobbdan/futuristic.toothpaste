@@ -13,6 +13,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as util from 'util'
+import * as child_process from 'child_process'
 
 const readFile = util.promisify(fs.readFile)
 const readdir = util.promisify(fs.readdir)
@@ -86,6 +87,7 @@ async function getGenerated(): Promise<string[]> {
         return []
     }
 }
+
 
 void (async () => {
     const args = process.argv.slice(2).concat(await getGenerated())
